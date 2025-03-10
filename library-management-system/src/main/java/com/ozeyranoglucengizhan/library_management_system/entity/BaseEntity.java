@@ -15,10 +15,10 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "create_date")
+    @Column(name = "entity_create_date")
     private LocalDateTime createDate;
 
-    @Column(name = "update_date")
+    @Column(name = "entity_update_date")
     private LocalDateTime updateDate;
 
     @PrePersist

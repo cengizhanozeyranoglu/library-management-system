@@ -1,14 +1,12 @@
 package com.ozeyranoglucengizhan.library_management_system.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "books")
@@ -21,12 +19,25 @@ public class Books extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "author")
-    private String author;
-
     @Column(name = "publication_year")
-    private LocalDateTime publicatonYear;
+    private Integer publicatonYear;
 
     @Column(name = "state")
     private String state;
+
+    @OneToMany(mappedBy = "book")
+    private List<BorrowedBooks> borrowedBooks;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
+
+    @ManyToMany
+    @JoinTable(
+            name = "book_category",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> category;
+
 }
