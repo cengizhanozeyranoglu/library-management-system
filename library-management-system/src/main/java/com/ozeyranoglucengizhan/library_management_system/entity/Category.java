@@ -19,8 +19,8 @@ import java.util.List;
 @Table(name = "category")
 public class Category extends BaseEntity {
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "category_name")
+    private String categoryName;
 
     @ManyToMany(mappedBy = "category")
     private List<Books> books;

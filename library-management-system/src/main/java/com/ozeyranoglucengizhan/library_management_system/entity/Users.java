@@ -19,11 +19,11 @@ import java.util.List;
 @NoArgsConstructor
 public class Users extends BaseEntity {
 
-    @Column(name = "first_name",nullable = false)
-    private String firstName;
+    @Column(name = "users_first_name",nullable = false)
+    private String userFirstName;
 
-    @Column(name= "last_name",nullable = false)
-    private String lastName;
+    @Column(name= "users_last_name",nullable = false)
+    private String userLastName;
 
     @Column(name = "email",unique = true,nullable = false)
     private String email;

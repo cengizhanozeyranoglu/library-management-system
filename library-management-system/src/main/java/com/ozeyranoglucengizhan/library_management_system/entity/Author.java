@@ -19,13 +19,13 @@ import java.util.List;
 @Table(name = "author")
 public class Author extends BaseEntity {
 
-    @Column(name = "name",nullable = false)
-    private String name;
+    @Column(name = "author_name",nullable = false)
+    private String authorName;
 
-    @Column(name = "last_name",nullable = false)
-    private String lastName;
+    @Column(name = "author_last_name",nullable = false)
+    private String authorLastName;
 
     @OneToMany(mappedBy = "author")
-    private List<Books> book;
+    private List<Books> books;
 
 }
