@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class Books extends BaseEntity {
     private String title;
 
     @Column(name = "publication_year")
-    private Integer publicatonYear;
+    private Integer publicationYear;
 
     @Column(name = "state")
     private String state;
@@ -32,7 +34,7 @@ public class Books extends BaseEntity {
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "book_category",
             joinColumns = @JoinColumn(name = "book_id"),

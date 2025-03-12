@@ -8,10 +8,8 @@ import com.ozeyranoglucengizhan.library_management_system.service.IAuthorService
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -33,7 +31,7 @@ public class AuthorServiceImpl implements IAuthorService {
     public boolean deleteAuthor(Long id) {
         Author author = authorRepository.findById(id).orElseThrow(() -> new RuntimeException("Authorid :" + id + "not found"));
         authorRepository.delete(author);
-        log.info("Authot deleted id:" + id);
+        log.info("Author deleted id:" + id);
         return true;
 
     }
