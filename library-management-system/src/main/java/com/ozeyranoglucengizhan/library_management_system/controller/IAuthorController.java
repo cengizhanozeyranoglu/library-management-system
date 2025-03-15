@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface IAuthorController {
 
-    ResponseEntity<DtoAuthor> createAuthor(DtoAuthor dtoAuthor);
+    ResponseEntity<Void> createAuthor(DtoAuthor dtoAuthor);
 
-    ResponseEntity<Boolean> deleteAuthor(Long id);
+    ResponseEntity<Void> deleteAuthor(Long id);
 
-    ResponseEntity<DtoAuthor> updateAuthor(DtoAuthor dtoAuthor, Long id);
+    ResponseEntity<Void> updateAuthor(DtoAuthor dtoAuthor, Long id);
 
     ResponseEntity<DtoAuthor> getDtoAuthorById(Long id);
 

@@ -1,9 +1,6 @@
 package com.ozeyranoglucengizhan.library_management_system.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +19,6 @@ public class Category extends BaseEntity {
     @Column(name = "category_name")
     private String categoryName;
 
-    @ManyToMany(mappedBy = "category")
+    @ManyToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Books> books;
 }

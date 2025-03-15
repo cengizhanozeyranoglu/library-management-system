@@ -30,16 +30,15 @@ public class Books extends BaseEntity {
     @OneToMany(mappedBy = "book")
     private List<BorrowedBooks> borrowedBooks;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST},fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_category",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private List<Category> category;
-
 }

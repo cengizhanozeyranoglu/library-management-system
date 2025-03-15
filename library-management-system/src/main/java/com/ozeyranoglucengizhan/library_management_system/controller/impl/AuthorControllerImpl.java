@@ -19,41 +19,29 @@ public class AuthorControllerImpl implements IAuthorController {
 
     @PostMapping(path = "/createAuthor")
     @Override
-    public ResponseEntity<DtoAuthor> createAuthor(@RequestBody DtoAuthor dtoAuthor) {
-        DtoAuthor dtoAuthors = authorService.createAuthor(dtoAuthor);
-        if (dtoAuthors != null) {
-            return ResponseEntity.ok().body(dtoAuthors);
-        }
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<Void> createAuthor(@RequestBody DtoAuthor dtoAuthor) {
+        authorService.createAuthor(dtoAuthor);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/deleteAuthor/{id}")
     @Override
-    public ResponseEntity<Boolean> deleteAuthor(@PathVariable Long id) {
-        if (authorService.deleteAuthor(id)) {
-            return ResponseEntity.ok(true);
-        }
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
+        authorService.deleteAuthor(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(path = "/updateAuthor/{id}")
     @Override
-    public ResponseEntity<DtoAuthor> updateAuthor(@RequestBody DtoAuthor dtoAuthor, @PathVariable Long id) {
-        try {
-            DtoAuthor updateAuthor = authorService.updateAuthor(dtoAuthor, id);
-            return ResponseEntity.ok().body(updateAuthor);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<Void> updateAuthor(@RequestBody DtoAuthor dtoAuthor, @PathVariable Long id) {
+        authorService.updateAuthor(dtoAuthor, id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path = "/getAuthorById/{id}")
     @Override
     public ResponseEntity<DtoAuthor> getDtoAuthorById(@PathVariable Long id) {
         DtoAuthor dtoAuthor = authorService.getAuthorById(id);
-        if (dtoAuthor == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok().body(dtoAuthor);
     }
 
@@ -61,6 +49,6 @@ public class AuthorControllerImpl implements IAuthorController {
     @Override
     public ResponseEntity<List<DtoAuthor>> getAuthorsList() {
         List<DtoAuthor> dtoAuthorsList = authorService.getAuthorByList();
-        return dtoAuthorsList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(dtoAuthorsList);
+        return ResponseEntity.ok().body(dtoAuthorsList);
     }
 }

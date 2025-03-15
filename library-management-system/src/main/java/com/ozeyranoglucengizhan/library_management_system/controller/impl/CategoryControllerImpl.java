@@ -4,6 +4,7 @@ import com.ozeyranoglucengizhan.library_management_system.controller.ICategoryCo
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoCategory;
 import com.ozeyranoglucengizhan.library_management_system.service.ICategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,48 +19,34 @@ public class CategoryControllerImpl implements ICategoryController {
 
     @PostMapping(path = "/createCategory")
     @Override
-    public ResponseEntity<DtoCategory> createCategory(@RequestBody DtoCategory category) {
-        DtoCategory createdCategory = categoryService.createCategory(category);
-        if (createdCategory != null) {
-            return ResponseEntity.ok().body(createdCategory);
-        }
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> createCategory(@RequestBody DtoCategory category) {
+        categoryService.createCategory(category);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/deleteCategoryById/{id}")
     @Override
-    public ResponseEntity<Boolean> deleteCategory(@PathVariable Long id) {
-        if (categoryService.deleteCategory(id)) {
-            return ResponseEntity.ok(true);
-        }
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping(path = "/updateCategoryById/{id}")
     @Override
-    public ResponseEntity<DtoCategory> updateCategory(@RequestBody DtoCategory dtoCategory, @PathVariable Long id) {
-        DtoCategory updatedCategory = categoryService.updateCategory(dtoCategory, id);
-        if (updatedCategory != null && !updatedCategory.getCategoryName().isEmpty()) {
-            return ResponseEntity.ok().body(updatedCategory);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> updateCategory(@RequestBody DtoCategory dtoCategory, @PathVariable Long id) {
+        categoryService.updateCategory(dtoCategory, id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path = "/getCategoryById/{id}")
     @Override
     public ResponseEntity<DtoCategory> getCategoryById(@PathVariable Long id) {
-        DtoCategory category = categoryService.getCategoryById(id);
-        if (category == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(category);
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
     @GetMapping(path = "/getCategoryList")
     @Override
     public ResponseEntity<List<DtoCategory>> getCategoryList() {
-        List<DtoCategory> dtoCategoryList = categoryService.getCategoryList();
-        return dtoCategoryList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(dtoCategoryList);
+        return ResponseEntity.ok(categoryService.getCategoryList());
     }
 }

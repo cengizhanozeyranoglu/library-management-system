@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface ICategoryService {
 
-    DtoCategory createCategory(DtoCategory dtoCategory);
+    void createCategory(DtoCategory dtoCategory);
 
-    boolean deleteCategory(Long id);
+    void deleteCategory(Long id);
 
-    DtoCategory updateCategory(DtoCategory dtoCategory,Long id);
+    void updateCategory(DtoCategory dtoCategory,Long id);
 
     DtoCategory getCategoryById(Long id);
 

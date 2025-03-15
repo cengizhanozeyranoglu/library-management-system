@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper
 public interface CategoryMapper {
 
@@ -15,4 +17,6 @@ public interface CategoryMapper {
 
     @Mapping(target = "books", ignore = true)
     Category toEntity(DtoCategory dtoCategory);
+
+    List<DtoCategory> toDtoCategories(List<Category> categoryList);
 }

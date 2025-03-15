@@ -3,11 +3,13 @@ package com.ozeyranoglucengizhan.library_management_system.service.impl;
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoAuthor;
 import com.ozeyranoglucengizhan.library_management_system.entity.Author;
 import com.ozeyranoglucengizhan.library_management_system.mapper.AuthorMapper;
+import com.ozeyranoglucengizhan.library_management_system.mapper.BookMapper;
 import com.ozeyranoglucengizhan.library_management_system.repository.AuthorRepository;
 import com.ozeyranoglucengizhan.library_management_system.service.IAuthorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,34 +22,25 @@ public class AuthorServiceImpl implements IAuthorService {
 
 
     @Override
-    public DtoAuthor createAuthor(DtoAuthor dtoAuthor) {
-
+    public void createAuthor(DtoAuthor dtoAuthor) {
         Author author = AuthorMapper.INSTANCE.toEntity(dtoAuthor);
         authorRepository.save(author);
-        return AuthorMapper.INSTANCE.toDto(author);
     }
 
     @Override
-    public boolean deleteAuthor(Long id) {
+    public void deleteAuthor(Long id) {
         Author author = authorRepository.findById(id).orElseThrow(() -> new RuntimeException("Authorid :" + id + "not found"));
         authorRepository.delete(author);
         log.info("Author deleted id:" + id);
-        return true;
-
     }
 
     @Override
-    public DtoAuthor updateAuthor(DtoAuthor dtoAuthor, Long id) {
-        return authorRepository.findById(id)
-                .map(dbAuthor -> {
-                    dbAuthor.setAuthorName(dtoAuthor.getAuthorName());
-                    dbAuthor.setAuthorLastName(dtoAuthor.getAuthorLastName());
-                    return AuthorMapper.INSTANCE.toDto(authorRepository.save(dbAuthor));
-                })
-                .orElseThrow(() -> {
-                    log.info("Author update failed");
-                    return new RuntimeException("Authorid :" + id + "not found");
-                });
+    public void updateAuthor(DtoAuthor dtoAuthor, Long id) {
+        Author author = authorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Authorid:" + id + "not found"));
+        AuthorMapper.INSTANCE.updateAuthor(dtoAuthor, author);
+        authorRepository.save(author);
+        log.info("Author updated id:" + id);
     }
 
     @Override
@@ -60,10 +53,7 @@ public class AuthorServiceImpl implements IAuthorService {
     @Override
     public List<DtoAuthor> getAuthorByList() {
         List<Author> authorList = authorRepository.findAll();
-        List<DtoAuthor> dtoAuthorsList = new ArrayList<>();
-        for (Author author : authorList) {
-            dtoAuthorsList.add(AuthorMapper.INSTANCE.toDto(author));
-        }
-        return dtoAuthorsList;
+        return AuthorMapper.INSTANCE.toDtoAuthorList(authorList);
+
     }
 }

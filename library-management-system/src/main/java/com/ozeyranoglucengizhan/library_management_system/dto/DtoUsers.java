@@ -22,7 +22,4 @@ public class DtoUsers {
     private String password;
 
     private List<Long> borrowedBooksId;
-
-
-
 }

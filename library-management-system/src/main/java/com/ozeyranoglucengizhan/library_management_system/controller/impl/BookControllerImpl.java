@@ -4,6 +4,7 @@ import com.ozeyranoglucengizhan.library_management_system.controller.IBookContro
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoBooks;
 import com.ozeyranoglucengizhan.library_management_system.service.IBookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,43 +19,33 @@ public class BookControllerImpl implements IBookController {
 
     @PostMapping(path = "/createBook")
     @Override
-    public ResponseEntity<Boolean> createBooks(@RequestBody DtoBooks dtoBooks) {
-        boolean createdBooks = bookService.createBook(dtoBooks);
-        return createdBooks ? ResponseEntity.ok().build() : ResponseEntity.noContent().build();
+    public ResponseEntity<Void> createBooks(@RequestBody DtoBooks dtoBooks) {
+        bookService.createBook(dtoBooks);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/deleteBook/{id}")
     @Override
     public ResponseEntity<Boolean> deleteBook(@PathVariable Long id) {
-        if (bookService.deleteBook(id)) {
-            return ResponseEntity.ok(true);
-        }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(bookService.deleteBook(id));
     }
 
     @PutMapping(path = "/updateBook/{id}")
     @Override
-    public ResponseEntity<Boolean> updateBook(@PathVariable Long id, @RequestBody DtoBooks dtoBooks) {
-        if (bookService.updateBook(dtoBooks, id)) {
-            return ResponseEntity.ok(true);
-        }
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> updateBook(@RequestBody DtoBooks dtoBooks, @PathVariable Long id) {
+        bookService.updateBook(dtoBooks, id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(path = "/getBookList")
     @Override
     public ResponseEntity<List<DtoBooks>> getAllBooks() {
-        List<DtoBooks> dtoBooksList = bookService.getBookList();
-        return dtoBooksList.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(dtoBooksList);
+        return ResponseEntity.ok(bookService.getBookList());
     }
 
     @GetMapping(path = "/getBookById/{id}")
     @Override
     public ResponseEntity<DtoBooks> getBookById(@PathVariable Long id) {
-        DtoBooks dtoBook = bookService.getBookById(id);
-        if (dtoBook == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(dtoBook);
+        return ResponseEntity.ok(bookService.getBookById(id));
     }
 }

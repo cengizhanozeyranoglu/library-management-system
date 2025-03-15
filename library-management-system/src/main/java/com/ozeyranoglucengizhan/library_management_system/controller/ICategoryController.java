@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface ICategoryController {
 
-    ResponseEntity<DtoCategory> createCategory(DtoCategory category);
+    ResponseEntity<Void> createCategory(DtoCategory category);
 
-    ResponseEntity<Boolean> deleteCategory(Long id);
+    ResponseEntity<Void> deleteCategory(Long id);
 
-    ResponseEntity<DtoCategory> updateCategory(DtoCategory dtoCategory, Long id);
+    ResponseEntity<Void> updateCategory(DtoCategory dtoCategory, Long id);
 
     ResponseEntity<DtoCategory> getCategoryById(Long id);
 

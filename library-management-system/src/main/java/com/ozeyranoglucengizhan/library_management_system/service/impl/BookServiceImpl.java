@@ -30,16 +30,13 @@ public class BookServiceImpl implements IBookService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public boolean createBook(DtoBooks dtoBooks) {
+    public void createBook(DtoBooks dtoBooks) {
         Author author = getAuthorIfExist(dtoBooks.getAuthorId());
         List<Category> categoriesList = getCategoryIfExist(dtoBooks.getCategoryId());
 
-        Books book = BookMapper.INSTANCE.toBook(dtoBooks);
-        book.setCategory(categoriesList);
-        book.setAuthor(author);
+        Books book = BookMapper.INSTANCE.toBook(dtoBooks, author, categoriesList);
         bookRepository.save(book);
         log.info("Book saved succesfully.");
-        return true;
     }
 
     @Override
@@ -51,16 +48,14 @@ public class BookServiceImpl implements IBookService {
     }
 
     @Override
-    public boolean updateBook(DtoBooks dtoBooks, Long id) {
+    public void updateBook(DtoBooks dtoBooks, Long id) {
         Books book = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Books not in the database, check book id: " + id));
         Author author = getAuthorIfExist(dtoBooks.getAuthorId());
         List<Category> categories = getCategoryIfExist(dtoBooks.getCategoryId());
-        updateBookDetails(book, dtoBooks, author, categories);
+        BookMapper.INSTANCE.updateBook(dtoBooks, book, author, categories);
         bookRepository.save(book);
         log.info("Book updated succesfully");
-        return true;
-
     }
 
     @Override
@@ -69,10 +64,6 @@ public class BookServiceImpl implements IBookService {
                 .stream()
                 .map(book -> {
                     DtoBooks dtoBooks = BookMapper.INSTANCE.toDto(book);
-                    dtoBooks.setAuthorId(book.getId());
-                    dtoBooks.setCategoryId(book.getCategory().stream()
-                            .map(Category::getId)
-                            .collect(Collectors.toList()));
                     return dtoBooks;
                 })
                 .collect(Collectors.toList());
@@ -84,24 +75,9 @@ public class BookServiceImpl implements IBookService {
         if (optBook.isPresent()) {
             Books book = optBook.get();
             DtoBooks dtoBook = BookMapper.INSTANCE.toDto(book);
-            dtoBook.setAuthorId(book.getId());
-            List<Long> categoryIdList = book.getCategory().stream()
-                    .map(Category::getId)
-                    .collect(Collectors.toList());
-            dtoBook.setCategoryId(categoryIdList);
             return dtoBook;
-        }
-        else return null;
+        } else return null;
     }
-
-    private void updateBookDetails(Books book, DtoBooks dtoBooks, Author author, List<Category> categoryList) {
-        book.setPublicationYear(dtoBooks.getPublicationYear());
-        book.setState(dtoBooks.getState());
-        book.setTitle(dtoBooks.getTitle());
-        book.setCategory(categoryList);
-        book.setAuthor(author);
-    }
-
 
     public Author getAuthorIfExist(Long authorId) {
         return authorRepository.findById(authorId)

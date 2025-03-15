@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface IBookController {
 
-    ResponseEntity<Boolean> createBooks(DtoBooks dtoBooks);
+    ResponseEntity<Void> createBooks(DtoBooks dtoBooks);
 
     ResponseEntity<Boolean> deleteBook(Long id);
 
-    ResponseEntity<Boolean> updateBook(Long id, DtoBooks dtoBooks);
+    ResponseEntity<Void> updateBook(DtoBooks dtoBooks, Long id);
 
     ResponseEntity<List<DtoBooks>> getAllBooks();
 

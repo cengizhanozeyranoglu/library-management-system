@@ -1,9 +1,6 @@
 package com.ozeyranoglucengizhan.library_management_system.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +22,6 @@ public class Author extends BaseEntity {
     @Column(name = "author_last_name",nullable = false)
     private String authorLastName;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author",fetch = FetchType.LAZY)
     private List<Books> books;
-
 }

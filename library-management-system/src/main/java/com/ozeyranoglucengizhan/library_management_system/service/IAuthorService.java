@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface IAuthorService {
 
-    DtoAuthor createAuthor(DtoAuthor dtoAuthor);
+    void createAuthor(DtoAuthor dtoAuthor);
 
-    boolean deleteAuthor(Long id);
+    void deleteAuthor(Long id);
 
-    DtoAuthor updateAuthor(DtoAuthor dtoAuthor, Long id);
+    void updateAuthor(DtoAuthor dtoAuthor, Long id);
 
     DtoAuthor getAuthorById(Long id);
 

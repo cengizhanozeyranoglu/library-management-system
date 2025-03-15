@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface IBookService {
 
-    boolean createBook(DtoBooks dtoBooks);
+    void createBook(DtoBooks dtoBooks);
 
     boolean deleteBook(Long id);
 
-    boolean updateBook(DtoBooks dtoBooks, Long id);
+    void updateBook(DtoBooks dtoBooks, Long id);
 
     List<DtoBooks> getBookList();
 
