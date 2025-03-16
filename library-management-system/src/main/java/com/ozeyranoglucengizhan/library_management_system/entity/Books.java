@@ -1,5 +1,6 @@
 package com.ozeyranoglucengizhan.library_management_system.entity;
 
+import com.ozeyranoglucengizhan.library_management_system.enums.BookState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,8 +25,9 @@ public class Books extends BaseEntity {
     @Column(name = "publication_year")
     private Integer publicationYear;
 
-    @Column(name = "state")
-    private String state;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "book_state")
+    private BookState bookState;
 
     @OneToMany(mappedBy = "book")
     private List<BorrowedBooks> borrowedBooks;
@@ -34,7 +36,7 @@ public class Books extends BaseEntity {
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST},fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "book_category",
             joinColumns = @JoinColumn(name = "book_id"),

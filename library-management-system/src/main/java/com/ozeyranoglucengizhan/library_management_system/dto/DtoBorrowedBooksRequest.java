@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DtoBorrowedBooks {
+public class DtoBorrowedBooksRequest {
 
     private Long bookId;
 

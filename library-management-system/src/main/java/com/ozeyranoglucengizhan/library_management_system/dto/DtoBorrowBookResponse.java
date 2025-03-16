@@ -5,19 +5,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DtoUsers {
+public class DtoBorrowBookResponse {
+
+    private String bookTitle;
+
+    private String authorFirstName;
+
+    private String authorLastName;
 
     private String userFirstName;
 
     private String userLastName;
 
-    private String email;
+    private LocalDate borrowDate;
 
-    private String password;
+    private LocalDate dueDate;
+
 }
