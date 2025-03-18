@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "borrowed_books")
@@ -18,10 +17,10 @@ import java.time.LocalDateTime;
 public class BorrowedBooks extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id",nullable = false)
     private Books book;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private Users user;
 
@@ -31,17 +30,7 @@ public class BorrowedBooks extends BaseEntity {
     @Column(name = "due_date", nullable = false)
     private LocalDate dueDate;
 
-    @Column(name = "return_date")
-    private LocalDate returnDate;
-
-    @Column(name = "overdue_days", nullable = false)
-    private int overdueDays = 0;
-
-    @Column(name = "fine_amount", nullable = false)
-    private double fineAmount = 0.0;
-
-    @Column(name = "is_fine_paid", nullable = false)
-    private boolean isFinePaid = false;
-
+    @OneToOne(mappedBy = "borrowedBooks",cascade = CascadeType.REMOVE)
+    private ReturnBooks returnBooks;
 
 }
