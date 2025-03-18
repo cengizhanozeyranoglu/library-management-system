@@ -11,6 +11,7 @@ import com.ozeyranoglucengizhan.library_management_system.repository.ReturnBookR
 import com.ozeyranoglucengizhan.library_management_system.service.IReturnBooksService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -25,32 +26,50 @@ public class ReturnBookServiceImplService implements IReturnBooksService {
 
     final double DAILY_FINE_RATE = 50.0;
 
-
+    @Transactional
     @Override
     public DtoReturnBookResponse createReturnBooks(DtoReturnBookRequest request, LocalDate returnDate) {
         BorrowedBooks borrowedBook = borrowedBooksRepository.findById(request.getBorrowedBookId())
                 .orElseThrow(() -> new RuntimeException("Borrowed book not found"));
 
-
         LocalDate dueDate = borrowedBook.getDueDate();
-
-        ReturnBooks returnBooks = new ReturnBooks();
-        returnBooks.setBorrowedBooks(borrowedBook);
-        returnBooks.setReturnDate(returnDate);
 
         int overdueDays = calculateOverdueDays(dueDate, returnDate);
         double fineAmount = calculateFine(overdueDays);
 
-        returnBooks.setOverdueDays(overdueDays);
-        returnBooks.setFineAmount(fineAmount);
+        ReturnBooks returnBook = mapToEntity(borrowedBook, returnDate, overdueDays, fineAmount);
+        returnBookRepository.save(returnBook);
+
         borrowedBook.getBook().setBookState(BookState.AVAILABLE);
         borrowedBooksRepository.save(borrowedBook);
-        returnBookRepository.save(returnBooks);
 
-        DtoReturnBookResponse dtoResponse = ReturnBookMapper.INSTANCE.toResponse(borrowedBook, returnDate);
-        dtoResponse.setOverdueDays(overdueDays);
-        dtoResponse.setFineAmount(fineAmount);
+
+        DtoReturnBookResponse dtoResponse = ReturnBookMapper.INSTANCE
+                .toResponse(borrowedBook, returnDate, overdueDays, fineAmount);
         return dtoResponse;
+    }
+
+    private ReturnBooks mapToEntity(BorrowedBooks borrowedBooks, LocalDate returnDate, int overdueDays, double fineAmount) {
+        ReturnBooks returnBooks = new ReturnBooks();
+        returnBooks.setReturnDate(returnDate);
+        returnBooks.setOverdueDays(overdueDays);
+        returnBooks.setFineAmount(fineAmount);
+        returnBooks.setBorrowedBooks(borrowedBooks);
+        return returnBooks;
+    }
+
+    @Override
+    public void payFine(Long returnBookId) {
+        ReturnBooks returnBook = returnBookRepository.findById(returnBookId)
+                .orElseThrow(() -> new RuntimeException("Return book not found"));
+        if (returnBook.getFineAmount() == 0) {
+            throw new IllegalStateException("No fine to pay for this return");
+        }
+        if (returnBook.isFinePaid()) {
+            throw new IllegalStateException("Fine as already been paid");
+        }
+        returnBook.setFinePaid(true);
+        returnBookRepository.save(returnBook);
     }
 
     private double calculateFine(int overdueDays) {

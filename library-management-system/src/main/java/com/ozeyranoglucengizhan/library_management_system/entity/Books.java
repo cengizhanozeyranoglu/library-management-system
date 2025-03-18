@@ -6,8 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class Books extends BaseEntity {
     @Column(name = "book_state")
     private BookState bookState;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book",cascade = CascadeType.REMOVE)
     private List<BorrowedBooks> borrowedBooks;
 
     @ManyToOne(fetch = FetchType.LAZY)

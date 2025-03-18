@@ -32,4 +32,7 @@ public class ReturnBooks {
 
     @Column(name = "fine_amount")
     private Double fineAmount;
+
+    @Column(name = "is_fine_paid")
+    private boolean isFinePaid = false;
 }

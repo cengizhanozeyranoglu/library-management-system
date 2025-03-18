@@ -8,4 +8,6 @@ import java.time.LocalDate;
 public interface IReturnBooksService {
 
     DtoReturnBookResponse createReturnBooks(DtoReturnBookRequest  request, LocalDate returnDate);
+
+    void payFine(Long returnBookId);
 }

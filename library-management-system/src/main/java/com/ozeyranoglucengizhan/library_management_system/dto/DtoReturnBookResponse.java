@@ -30,4 +30,6 @@ public class DtoReturnBookResponse {
     private Integer overdueDays;
 
     private Double fineAmount;
+
+    private boolean isFinePaid;
 }

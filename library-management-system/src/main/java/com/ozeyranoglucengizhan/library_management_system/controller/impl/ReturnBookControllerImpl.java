@@ -23,7 +23,14 @@ public class ReturnBookControllerImpl implements IReturnBookController {
     @Override
     public ResponseEntity<DtoReturnBookResponse> createReturnBook(
             @RequestBody DtoReturnBookRequest dtoReturnBookRequest,
-            @RequestParam @DateTimeFormat (iso = DateTimeFormat.ISO.DATE) LocalDate returnDate) {
-        return ResponseEntity.ok(returnBooksService.createReturnBooks(dtoReturnBookRequest,returnDate));
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate returnDate) {
+        return ResponseEntity.ok(returnBooksService.createReturnBooks(dtoReturnBookRequest, returnDate));
+    }
+
+    @PutMapping(path = "payFine/{returnBookId}")
+    @Override
+    public ResponseEntity<Void> payFine(@PathVariable Long returnBookId) {
+        returnBooksService.payFine(returnBookId);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -8,6 +8,8 @@ import java.time.LocalDate;
 
 public interface IReturnBookController {
 
-ResponseEntity<DtoReturnBookResponse> createReturnBook(DtoReturnBookRequest dtoReturnBookRequest, LocalDate returnDate);
+    ResponseEntity<DtoReturnBookResponse> createReturnBook(DtoReturnBookRequest dtoReturnBookRequest, LocalDate returnDate);
+
+    ResponseEntity<Void> payFine(Long returnBookId);
 
 }
