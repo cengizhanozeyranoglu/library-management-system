@@ -6,6 +6,7 @@ import com.ozeyranoglucengizhan.library_management_system.entity.Books;
 import com.ozeyranoglucengizhan.library_management_system.entity.BorrowedBooks;
 import com.ozeyranoglucengizhan.library_management_system.entity.Users;
 import com.ozeyranoglucengizhan.library_management_system.enums.BookState;
+import com.ozeyranoglucengizhan.library_management_system.mapper.BookMapper;
 import com.ozeyranoglucengizhan.library_management_system.mapper.BorrowBookMapper;
 import com.ozeyranoglucengizhan.library_management_system.mapper.BorrowBookMapperImpl;
 import com.ozeyranoglucengizhan.library_management_system.repository.BooksRepository;
@@ -16,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -38,6 +42,27 @@ public class BorrowBookServiceImpl implements IBorrowBookService {
         BorrowedBooks borrowedBooks = BorrowBookMapperImpl.INSTANCE.toBorrowBookEntity(book, user);
         book.setBookState(BookState.BORROWED);
         borrowedBooksRepository.save(borrowedBooks);
+        return response;
+    }
+
+    @Override
+    public List<DtoBorrowBookResponse> getBorrowedBookList() {
+        List<BorrowedBooks> borrowedBooksList = borrowedBooksRepository.findAll();
+        List<DtoBorrowBookResponse> borrowBookResponsesList = new ArrayList<>();
+        for (BorrowedBooks borrowedBooks : borrowedBooksList) {
+            DtoBorrowBookResponse dtoBorrowedBookResponse = BorrowBookMapper.INSTANCE
+                    .toBorrowBookResponse(borrowedBooks.getBook(), borrowedBooks.getUser());
+            borrowBookResponsesList.add(dtoBorrowedBookResponse);
+        }
+        return borrowBookResponsesList;
+    }
+
+    @Override
+    public DtoBorrowBookResponse getBorrowBookById(Long id) {
+        BorrowedBooks borrowedBooks = borrowedBooksRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("BorrowBook not found"));
+        DtoBorrowBookResponse response = BorrowBookMapper.INSTANCE
+                .toBorrowBookResponse(borrowedBooks.getBook(), borrowedBooks.getUser());
         return response;
     }
 

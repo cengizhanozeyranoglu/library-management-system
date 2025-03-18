@@ -5,11 +5,16 @@ import com.ozeyranoglucengizhan.library_management_system.dto.DtoReturnBookRespo
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface IReturnBookController {
 
     ResponseEntity<DtoReturnBookResponse> createReturnBook(DtoReturnBookRequest dtoReturnBookRequest, LocalDate returnDate);
 
     ResponseEntity<Void> payFine(Long returnBookId);
+
+    ResponseEntity<List<DtoReturnBookResponse>> getAllReturnBooks();
+
+    ResponseEntity<DtoReturnBookResponse> getReturnBookById(Long id);
 
 }

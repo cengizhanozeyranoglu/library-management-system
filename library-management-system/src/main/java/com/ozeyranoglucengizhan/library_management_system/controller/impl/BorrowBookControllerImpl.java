@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/api/library")
 @RequiredArgsConstructor
@@ -19,5 +21,17 @@ public class BorrowBookControllerImpl implements IBorrowBookController {
     @Override
     public ResponseEntity<DtoBorrowBookResponse> createBorrowBook(@RequestBody DtoBorrowedBooksRequest dtoBorrowedBooksRequest) {
         return ResponseEntity.ok(borrowBookService.createBorrowBook(dtoBorrowedBooksRequest));
+    }
+
+    @GetMapping(path = "/getBorrowBookList")
+    @Override
+    public ResponseEntity<List<DtoBorrowBookResponse>> getBorrowedBookList() {
+        return ResponseEntity.ok(borrowBookService.getBorrowedBookList());
+    }
+
+    @GetMapping(path = "getBorrowBookById/{id}")
+    @Override
+    public ResponseEntity<DtoBorrowBookResponse> getBorrowedBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(borrowBookService.getBorrowBookById(id));
     }
 }

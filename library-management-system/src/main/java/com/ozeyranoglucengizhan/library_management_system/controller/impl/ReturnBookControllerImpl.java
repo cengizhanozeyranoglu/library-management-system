@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,5 +33,17 @@ public class ReturnBookControllerImpl implements IReturnBookController {
     public ResponseEntity<Void> payFine(@PathVariable Long returnBookId) {
         returnBooksService.payFine(returnBookId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(path = "/getReturnBookList")
+    @Override
+    public ResponseEntity<List<DtoReturnBookResponse>> getAllReturnBooks() {
+        return ResponseEntity.ok(returnBooksService.getAllReturnBooks());
+    }
+
+    @GetMapping(path = "/getReturnBookById/{id}")
+    @Override
+    public ResponseEntity<DtoReturnBookResponse> getReturnBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(returnBooksService.getReturnBookById(id));
     }
 }

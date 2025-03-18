@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -70,6 +72,29 @@ public class ReturnBookServiceImplService implements IReturnBooksService {
         }
         returnBook.setFinePaid(true);
         returnBookRepository.save(returnBook);
+    }
+
+    @Override
+    public List<DtoReturnBookResponse> getAllReturnBooks() {
+        List<ReturnBooks> returnBooksList = returnBookRepository.findAll();
+        List<DtoReturnBookResponse> dtoReturnBookResponseList = new ArrayList<>();
+        for (ReturnBooks returnBook : returnBooksList) {
+            DtoReturnBookResponse dtoReturnBookResponse = ReturnBookMapper.INSTANCE
+                    .toResponse(returnBook.getBorrowedBooks(), returnBook.getReturnDate(), returnBook.getOverdueDays(), returnBook.getFineAmount());
+            dtoReturnBookResponse.setFinePaid(returnBook.isFinePaid());
+            dtoReturnBookResponseList.add(dtoReturnBookResponse);
+        }
+        return dtoReturnBookResponseList;
+    }
+
+    @Override
+    public DtoReturnBookResponse getReturnBookById(Long returnBookId) {
+        ReturnBooks returnBook = returnBookRepository.findById(returnBookId)
+                .orElseThrow(() -> new RuntimeException("Return book not found"));
+        DtoReturnBookResponse dtoReturnBookResponse = ReturnBookMapper.INSTANCE
+                .toResponse(returnBook.getBorrowedBooks(), returnBook.getReturnDate(), returnBook.getOverdueDays(), returnBook.getFineAmount());
+        dtoReturnBookResponse.setFinePaid(returnBook.isFinePaid());
+        return dtoReturnBookResponse;
     }
 
     private double calculateFine(int overdueDays) {
