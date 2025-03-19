@@ -2,6 +2,7 @@ package com.ozeyranoglucengizhan.library_management_system.service.impl;
 
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoCategory;
 import com.ozeyranoglucengizhan.library_management_system.entity.Category;
+import com.ozeyranoglucengizhan.library_management_system.exception.NotFoundException;
 import com.ozeyranoglucengizhan.library_management_system.mapper.CategoryMapper;
 import com.ozeyranoglucengizhan.library_management_system.repository.CategoryRepository;
 import com.ozeyranoglucengizhan.library_management_system.service.ICategoryService;
@@ -27,7 +28,7 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public void deleteCategory(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category id:" + id + "not found."));
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category id:" + id + "not found."));
         categoryRepository.delete(category);
         log.info("Category id:" + id + "deleted.");
     }
@@ -39,14 +40,14 @@ public class CategoryServiceImpl implements ICategoryService {
                     dbCategory.setCategoryName(dtoCategory.getCategoryName());
                     return CategoryMapper.INSTANCE.toDto(categoryRepository.save(dbCategory));
                 })
-                .orElseThrow(() -> new RuntimeException("Category id " + id + " not found"));
+                .orElseThrow(() -> new NotFoundException("Category id " + id + " not found"));
     }
 
     @Override
     public DtoCategory getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .map(CategoryMapper.INSTANCE::toDto)
-                .orElseThrow(() -> new RuntimeException("Category id: " + id + "not found"));
+                .orElseThrow(() -> new NotFoundException("Category id: " + id + "not found"));
     }
 
     @Override

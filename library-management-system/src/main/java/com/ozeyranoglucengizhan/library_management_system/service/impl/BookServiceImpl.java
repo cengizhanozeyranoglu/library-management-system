@@ -4,6 +4,7 @@ import com.ozeyranoglucengizhan.library_management_system.dto.DtoBooks;
 import com.ozeyranoglucengizhan.library_management_system.entity.Author;
 import com.ozeyranoglucengizhan.library_management_system.entity.Books;
 import com.ozeyranoglucengizhan.library_management_system.entity.Category;
+import com.ozeyranoglucengizhan.library_management_system.exception.NotFoundException;
 import com.ozeyranoglucengizhan.library_management_system.mapper.BookMapper;
 import com.ozeyranoglucengizhan.library_management_system.repository.AuthorRepository;
 import com.ozeyranoglucengizhan.library_management_system.repository.BooksRepository;
@@ -41,7 +42,7 @@ public class BookServiceImpl implements IBookService {
 
     @Override
     public boolean deleteBook(Long id) {
-        Books book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book id " + id + "not found."));
+        Books book = bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Book id " + id + "not found."));
         bookRepository.delete(book);
         log.info("Book id " + id + " deleted.");
         return true;
@@ -50,7 +51,7 @@ public class BookServiceImpl implements IBookService {
     @Override
     public void updateBook(DtoBooks dtoBooks, Long id) {
         Books book = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Books not in the database, check book id: " + id));
+                .orElseThrow(() -> new NotFoundException("Books not in the database, check book id: " + id));
         Author author = getAuthorIfExist(dtoBooks.getAuthorId());
         List<Category> categories = getCategoryIfExist(dtoBooks.getCategoryId());
         BookMapper.INSTANCE.updateBook(dtoBooks, book, author, categories);
@@ -81,13 +82,13 @@ public class BookServiceImpl implements IBookService {
 
     public Author getAuthorIfExist(Long authorId) {
         return authorRepository.findById(authorId)
-                .orElseThrow(() -> new RuntimeException("Author not found id: " + authorId));
+                .orElseThrow(() -> new NotFoundException("Author not found id: " + authorId));
     }
 
     public List<Category> getCategoryIfExist(List<Long> categoryId) {
         List<Category> categories = categoryRepository.findAllById(categoryId);
         if (categories.size() != categoryId.size()) {
-            throw new RuntimeException("One or more categories not found, check category ids.");
+            throw new NotFoundException("One or more categories not found, check category ids.");
         }
         return categories;
     }

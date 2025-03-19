@@ -2,6 +2,7 @@ package com.ozeyranoglucengizhan.library_management_system.service.impl;
 
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoUsers;
 import com.ozeyranoglucengizhan.library_management_system.entity.Users;
+import com.ozeyranoglucengizhan.library_management_system.exception.NotFoundException;
 import com.ozeyranoglucengizhan.library_management_system.mapper.UserMapper;
 import com.ozeyranoglucengizhan.library_management_system.repository.UsersRepository;
 import com.ozeyranoglucengizhan.library_management_system.service.IUserService;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean deleteUser(Long id) {
-        Users user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
+        Users user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User with id " + id + " not found"));
         userRepository.delete(user);
         log.info("User deleted id:" + id);
         return true;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void updateUser(Long id, DtoUsers dtoUser) {
-        Users user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
+        Users user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User with id " + id + " not found"));
         UserMapper.INSTANCE.updateUser(dtoUser, user);
         log.info("User updated id:" + id);
         userRepository.save(user);
@@ -43,7 +44,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public DtoUsers getUserById(Long id) {
-        Users user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
+        Users user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User with id " + id + " not found"));
         DtoUsers dtoUser = UserMapper.INSTANCE.toDto(user);
         return dtoUser;
     }

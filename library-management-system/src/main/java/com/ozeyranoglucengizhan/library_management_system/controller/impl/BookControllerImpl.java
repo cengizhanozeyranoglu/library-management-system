@@ -3,6 +3,7 @@ package com.ozeyranoglucengizhan.library_management_system.controller.impl;
 import com.ozeyranoglucengizhan.library_management_system.controller.IBookController;
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoBooks;
 import com.ozeyranoglucengizhan.library_management_system.service.IBookService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class BookControllerImpl implements IBookController {
 
     @PostMapping(path = "/createBook")
     @Override
-    public ResponseEntity<Void> createBooks(@RequestBody DtoBooks dtoBooks) {
+    public ResponseEntity<Void> createBooks(@RequestBody @Valid DtoBooks dtoBooks) {
         bookService.createBook(dtoBooks);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -32,7 +33,7 @@ public class BookControllerImpl implements IBookController {
 
     @PutMapping(path = "/updateBook/{id}")
     @Override
-    public ResponseEntity<Void> updateBook(@RequestBody DtoBooks dtoBooks, @PathVariable Long id) {
+    public ResponseEntity<Void> updateBook(@RequestBody @Valid DtoBooks dtoBooks, @PathVariable Long id) {
         bookService.updateBook(dtoBooks, id);
         return ResponseEntity.ok().build();
     }

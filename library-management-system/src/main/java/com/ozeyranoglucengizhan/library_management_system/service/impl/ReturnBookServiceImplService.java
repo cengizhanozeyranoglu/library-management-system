@@ -5,11 +5,14 @@ import com.ozeyranoglucengizhan.library_management_system.dto.DtoReturnBookRespo
 import com.ozeyranoglucengizhan.library_management_system.entity.BorrowedBooks;
 import com.ozeyranoglucengizhan.library_management_system.entity.ReturnBooks;
 import com.ozeyranoglucengizhan.library_management_system.enums.BookState;
+import com.ozeyranoglucengizhan.library_management_system.exception.BaseException;
+import com.ozeyranoglucengizhan.library_management_system.exception.NotFoundException;
 import com.ozeyranoglucengizhan.library_management_system.mapper.ReturnBookMapper;
 import com.ozeyranoglucengizhan.library_management_system.repository.BorrowedBooksRepository;
 import com.ozeyranoglucengizhan.library_management_system.repository.ReturnBookRepository;
 import com.ozeyranoglucengizhan.library_management_system.service.IReturnBooksService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,12 +66,12 @@ public class ReturnBookServiceImplService implements IReturnBooksService {
     @Override
     public void payFine(Long returnBookId) {
         ReturnBooks returnBook = returnBookRepository.findById(returnBookId)
-                .orElseThrow(() -> new RuntimeException("Return book not found"));
+                .orElseThrow(() -> new NotFoundException("Return book not found"));
         if (returnBook.getFineAmount() == 0) {
-            throw new IllegalStateException("No fine to pay for this return");
+            throw new BaseException("No fine to pay for this return", HttpStatus.NO_CONTENT);
         }
         if (returnBook.isFinePaid()) {
-            throw new IllegalStateException("Fine as already been paid");
+            throw new BaseException("Fine as already been paid",HttpStatus.BAD_REQUEST);
         }
         returnBook.setFinePaid(true);
         returnBookRepository.save(returnBook);
@@ -90,7 +93,7 @@ public class ReturnBookServiceImplService implements IReturnBooksService {
     @Override
     public DtoReturnBookResponse getReturnBookById(Long returnBookId) {
         ReturnBooks returnBook = returnBookRepository.findById(returnBookId)
-                .orElseThrow(() -> new RuntimeException("Return book not found"));
+                .orElseThrow(() -> new NotFoundException("Return book not found"));
         DtoReturnBookResponse dtoReturnBookResponse = ReturnBookMapper.INSTANCE
                 .toResponse(returnBook.getBorrowedBooks(), returnBook.getReturnDate(), returnBook.getOverdueDays(), returnBook.getFineAmount());
         dtoReturnBookResponse.setFinePaid(returnBook.isFinePaid());

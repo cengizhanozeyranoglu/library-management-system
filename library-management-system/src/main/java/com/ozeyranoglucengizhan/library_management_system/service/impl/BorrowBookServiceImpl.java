@@ -6,6 +6,7 @@ import com.ozeyranoglucengizhan.library_management_system.entity.Books;
 import com.ozeyranoglucengizhan.library_management_system.entity.BorrowedBooks;
 import com.ozeyranoglucengizhan.library_management_system.entity.Users;
 import com.ozeyranoglucengizhan.library_management_system.enums.BookState;
+import com.ozeyranoglucengizhan.library_management_system.exception.NotFoundException;
 import com.ozeyranoglucengizhan.library_management_system.mapper.BookMapper;
 import com.ozeyranoglucengizhan.library_management_system.mapper.BorrowBookMapper;
 import com.ozeyranoglucengizhan.library_management_system.mapper.BorrowBookMapperImpl;
@@ -60,14 +61,14 @@ public class BorrowBookServiceImpl implements IBorrowBookService {
     @Override
     public DtoBorrowBookResponse getBorrowBookById(Long id) {
         BorrowedBooks borrowedBooks = borrowedBooksRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("BorrowBook not found"));
+                .orElseThrow(() -> new NotFoundException("BorrowBook not found"));
         DtoBorrowBookResponse response = BorrowBookMapper.INSTANCE
                 .toBorrowBookResponse(borrowedBooks.getBook(), borrowedBooks.getUser());
         return response;
     }
 
     public Users getUserIfAvailable(Long userId) {
-        Users user = usersRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Not Found"));
+        Users user = usersRepository.findById(userId).orElseThrow(() -> new NotFoundException("User Not Found"));
         return user;
     }
 

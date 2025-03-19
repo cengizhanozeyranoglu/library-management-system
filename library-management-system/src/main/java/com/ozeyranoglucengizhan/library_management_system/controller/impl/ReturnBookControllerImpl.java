@@ -4,6 +4,7 @@ import com.ozeyranoglucengizhan.library_management_system.controller.IReturnBook
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoReturnBookRequest;
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoReturnBookResponse;
 import com.ozeyranoglucengizhan.library_management_system.service.IReturnBooksService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class ReturnBookControllerImpl implements IReturnBookController {
     @PostMapping("/createReturnBook")
     @Override
     public ResponseEntity<DtoReturnBookResponse> createReturnBook(
-            @RequestBody DtoReturnBookRequest dtoReturnBookRequest,
+            @RequestBody @Valid DtoReturnBookRequest dtoReturnBookRequest,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate returnDate) {
         return ResponseEntity.ok(returnBooksService.createReturnBooks(dtoReturnBookRequest, returnDate));
     }

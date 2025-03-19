@@ -38,7 +38,7 @@ public class AuthorServiceImpl implements IAuthorService {
     @Override
     public void updateAuthor(DtoAuthor dtoAuthor, Long id) {
         Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Authorid:" + id + "not found"));
+                .orElseThrow(() -> new NotFoundException("Authorid:" + id + "not found"));
         AuthorMapper.INSTANCE.updateAuthor(dtoAuthor, author);
         authorRepository.save(author);
         log.info("Author updated id:" + id);
@@ -48,7 +48,7 @@ public class AuthorServiceImpl implements IAuthorService {
     public DtoAuthor getAuthorById(Long id) {
         return authorRepository.findById(id)
                 .map(AuthorMapper.INSTANCE::toDto)
-                .orElseThrow(() -> new RuntimeException("Authorid:" + id + "not found"));
+                .orElseThrow(() -> new NotFoundException("Authorid:" + id + "not found"));
     }
 
     @Override

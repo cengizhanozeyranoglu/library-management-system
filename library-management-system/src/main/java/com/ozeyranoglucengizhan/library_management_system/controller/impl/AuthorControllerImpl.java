@@ -34,7 +34,7 @@ public class AuthorControllerImpl implements IAuthorController {
 
     @PutMapping(path = "/updateAuthor/{id}")
     @Override
-    public ResponseEntity<Void> updateAuthor(@RequestBody DtoAuthor dtoAuthor, @PathVariable Long id) {
+    public ResponseEntity<Void> updateAuthor(@RequestBody @Valid DtoAuthor dtoAuthor, @PathVariable Long id) {
         authorService.updateAuthor(dtoAuthor, id);
         return ResponseEntity.ok().build();
     }

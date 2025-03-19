@@ -3,6 +3,7 @@ package com.ozeyranoglucengizhan.library_management_system.controller.impl;
 import com.ozeyranoglucengizhan.library_management_system.controller.IUserController;
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoUsers;
 import com.ozeyranoglucengizhan.library_management_system.service.IUserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class UserControllerImpl implements IUserController {
 
     @PostMapping(path = "/createUser")
     @Override
-    public ResponseEntity<Void> createUser(@RequestBody DtoUsers dtoUser) {
+    public ResponseEntity<Void> createUser(@RequestBody @Valid DtoUsers dtoUser) {
         userService.createUser(dtoUser);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -33,7 +34,7 @@ public class UserControllerImpl implements IUserController {
 
     @PutMapping(path = "/updateUser/{id}")
     @Override
-    public ResponseEntity<Void> updateUser(@PathVariable Long id, @RequestBody DtoUsers dtoUser) {
+    public ResponseEntity<Void> updateUser(@PathVariable Long id, @RequestBody @Valid DtoUsers dtoUser) {
         userService.updateUser(id,dtoUser);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

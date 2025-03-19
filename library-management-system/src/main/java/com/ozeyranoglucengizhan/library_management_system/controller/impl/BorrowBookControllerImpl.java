@@ -4,6 +4,7 @@ import com.ozeyranoglucengizhan.library_management_system.controller.IBorrowBook
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoBorrowBookResponse;
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoBorrowedBooksRequest;
 import com.ozeyranoglucengizhan.library_management_system.service.IBorrowBookService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class BorrowBookControllerImpl implements IBorrowBookController {
 
     @PostMapping(path = "/createBorrowBook")
     @Override
-    public ResponseEntity<DtoBorrowBookResponse> createBorrowBook(@RequestBody DtoBorrowedBooksRequest dtoBorrowedBooksRequest) {
+    public ResponseEntity<DtoBorrowBookResponse> createBorrowBook(@RequestBody @Valid DtoBorrowedBooksRequest dtoBorrowedBooksRequest) {
         return ResponseEntity.ok(borrowBookService.createBorrowBook(dtoBorrowedBooksRequest));
     }
 
