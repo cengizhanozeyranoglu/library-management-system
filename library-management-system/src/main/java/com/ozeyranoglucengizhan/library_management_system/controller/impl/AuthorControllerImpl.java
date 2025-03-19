@@ -3,6 +3,7 @@ package com.ozeyranoglucengizhan.library_management_system.controller.impl;
 import com.ozeyranoglucengizhan.library_management_system.controller.IAuthorController;
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoAuthor;
 import com.ozeyranoglucengizhan.library_management_system.service.IAuthorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class AuthorControllerImpl implements IAuthorController {
 
     @PostMapping(path = "/createAuthor")
     @Override
-    public ResponseEntity<Void> createAuthor(@RequestBody DtoAuthor dtoAuthor) {
+    public ResponseEntity<Void> createAuthor(@RequestBody @Valid DtoAuthor dtoAuthor) {
         authorService.createAuthor(dtoAuthor);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

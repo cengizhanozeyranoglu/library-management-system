@@ -2,15 +2,16 @@ package com.ozeyranoglucengizhan.library_management_system.service.impl;
 
 import com.ozeyranoglucengizhan.library_management_system.dto.DtoAuthor;
 import com.ozeyranoglucengizhan.library_management_system.entity.Author;
+import com.ozeyranoglucengizhan.library_management_system.exception.NotFoundException;
 import com.ozeyranoglucengizhan.library_management_system.mapper.AuthorMapper;
-import com.ozeyranoglucengizhan.library_management_system.mapper.BookMapper;
 import com.ozeyranoglucengizhan.library_management_system.repository.AuthorRepository;
 import com.ozeyranoglucengizhan.library_management_system.service.IAuthorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Slf4j
@@ -29,7 +30,7 @@ public class AuthorServiceImpl implements IAuthorService {
 
     @Override
     public void deleteAuthor(Long id) {
-        Author author = authorRepository.findById(id).orElseThrow(() -> new RuntimeException("Authorid :" + id + "not found"));
+        Author author = authorRepository.findById(id).orElseThrow(() -> new NotFoundException("Author not found id:"+ id));
         authorRepository.delete(author);
         log.info("Author deleted id:" + id);
     }
