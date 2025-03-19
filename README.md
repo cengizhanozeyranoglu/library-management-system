@@ -79,8 +79,8 @@ Kullanıcılar kitapları ödünç alabilir, belirlenen süre içinde iade edebi
 ---
 
 ## 📞 İletişim  
-📧 **E-posta:** [ornek@example.com](mailto:ornek@example.com)  
-🐙 **GitHub:** [@ornekKullanici](https://github.com/ornekKullanici)  
+📧 **E-posta:** [cengizhanozeyranoglu@gmail.com](mailto:cengizhanozeyranoglu@gmail.com)  
+🐙 **GitHub:** [@cengizhanozeyranoglu](https://github.com/cengizhanozeyranoglu)  
 
 ---
 
